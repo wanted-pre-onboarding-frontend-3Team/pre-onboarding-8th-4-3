@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const FormStyle = styled.div`
   & > form {
@@ -10,7 +10,7 @@ const FormStyle = styled.div`
     width: 98%;
     height: 50px;
   }
-  & > form > input[type="text"] {
+  & > form > input[type='text'] {
     padding: 5px 1%;
     width: 98%;
     margin-bottom: 10px;

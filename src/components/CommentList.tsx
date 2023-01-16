@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Comment = styled.div`
   padding: 7px 10px;
@@ -38,10 +38,10 @@ const Button = styled.div`
 const data = [
   {
     id: 1,
-    profile_url: "https://picsum.photos/id/1/50/50",
-    author: "abc_1",
-    content: "UI 테스트는 어떻게 진행하나요",
-    createdAt: "2020-05-01",
+    profile_url: 'https://picsum.photos/id/1/50/50',
+    author: 'abc_1',
+    content: 'UI 테스트는 어떻게 진행하나요',
+    createdAt: '2020-05-01',
   },
 ];
 
