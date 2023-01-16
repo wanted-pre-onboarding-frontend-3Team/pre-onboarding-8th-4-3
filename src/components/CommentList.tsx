@@ -1,4 +1,9 @@
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { RootState } from '../store/store';
+import { PageData, setPage, setTotalPage } from '../store/paginationSlice';
+import axios from 'axios';
 
 const Comment = styled.div`
   padding: 7px 10px;
@@ -34,35 +39,33 @@ const Button = styled.div`
   }
 `;
 
-// 임시 데이터 입니다. 코드 작성시 data 부분을 지워주세요
-const data = [
-  {
-    id: 1,
-    profile_url: 'https://picsum.photos/id/1/50/50',
-    author: 'abc_1',
-    content: 'UI 테스트는 어떻게 진행하나요',
-    createdAt: '2020-05-01',
-  },
-];
-
 const CommentList = () => {
+  const { currPage, pageData } = useSelector((state: RootState) => state.pagination);
+  const dispatch = useDispatch();
+  const getData = useCallback(async () => {
+    const { data, status } = await axios.get('http://localhost:4000/comments');
+    if (status < 300) {
+      dispatch(setPage({ pageData: data }));
+      dispatch(setTotalPage({ totalPage: data.length }));
+      // TODO: Partial 다시 사용해보기..
+    }
+  }, []);
+  useEffect(() => {
+    getData();
+  }, [getData]);
+
   return (
     <>
-      {data.map((comment, key) => (
-        <Comment key={key}>
+      {pageData.slice((currPage - 1) * 5, currPage * 5).map((comment) => (
+        <Comment key={comment.id}>
           <img src={comment.profile_url} alt="" />
-
           {comment.author}
-
           <CreatedAt>{comment.createdAt}</CreatedAt>
-
           <Content>{comment.content}</Content>
-
           <Button>
             <a>수정</a>
             <a>삭제</a>
           </Button>
-
           <hr />
         </Comment>
       ))}
