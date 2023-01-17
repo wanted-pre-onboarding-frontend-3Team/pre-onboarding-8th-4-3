@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RootState } from '../store/store';
-import { PageData, setPage, setTotalPage } from '../store/paginationSlice';
+import { setPage } from '../store/paginationSlice';
 import axios from 'axios';
 
 const Comment = styled.div`
@@ -46,8 +46,6 @@ const CommentList = () => {
     const { data, status } = await axios.get('http://localhost:4000/comments');
     if (status < 300) {
       dispatch(setPage({ pageData: data }));
-      dispatch(setTotalPage({ totalPage: data.length }));
-      // TODO: Partial 다시 사용해보기..
     }
   }, []);
   useEffect(() => {
