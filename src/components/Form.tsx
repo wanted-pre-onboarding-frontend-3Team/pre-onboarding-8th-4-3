@@ -1,4 +1,6 @@
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { RootState } from '../store/config';
 
 const FormStyle = styled.div`
   & > form {
@@ -24,17 +26,28 @@ const FormStyle = styled.div`
 `;
 
 const Form = () => {
+  const { commentData, mode } = useSelector((state: RootState) => state.form);
+  console.log(commentData);
+  const handleSubmit = () => {
+    if (mode === 'edit') {
+      console.log(mode);
+    } else {
+      console.log(mode);
+    }
+  };
   return (
     <FormStyle>
-      <form>
-        <input type="text" name="profile_url" placeholder="https://picsum.photos/id/1/50/50" required />
-        <br />
-        <input type="text" name="author" placeholder="작성자" />
-        <br />
-        <textarea name="content" placeholder="내용" required />
-        <br />
-        <input type="text" name="createdAt" placeholder="2020-05-30" required />
-        <br />
+      <form onSubmit={handleSubmit}>
+        <input
+          defaultValue={commentData.profile_url}
+          type="text"
+          name="profile_url"
+          placeholder="https://picsum.photos/id/1/50/50"
+          required
+        />
+        <input type="text" name="author" placeholder="작성자" defaultValue={commentData.author} />
+        <textarea name="content" placeholder="내용" defaultValue={commentData.content} required />
+        <input type="text" name="createdAt" defaultValue={commentData.createdAt} placeholder="2020-05-30" required />
         <button type="submit">등록</button>
       </form>
     </FormStyle>

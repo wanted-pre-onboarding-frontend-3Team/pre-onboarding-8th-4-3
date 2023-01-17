@@ -4,6 +4,8 @@ import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { RootState } from '../store/config';
 import { getCommentList } from '../store/slices/commentSlice';
+import { setEditComment } from '../store/slices/formSlice';
+import { CommentType } from '../types/comments.type';
 
 const CommentList = () => {
   const dispatch = useDispatch();
@@ -14,7 +16,9 @@ const CommentList = () => {
   useEffect(() => {
     dispatch(getCommentList(Number(page === null ? 1 : page)));
   }, [dispatch, page]);
-
+  const handleEdit = (commentData: CommentType) => {
+    dispatch(setEditComment({ commentData }));
+  };
   return (
     <div>
       {commentList &&
@@ -28,10 +32,10 @@ const CommentList = () => {
 
             <Content>{comment.content}</Content>
 
-            <Button>
-              <a>수정</a>
-              <a>삭제</a>
-            </Button>
+            <ButtonWrapper>
+              <Button onClick={() => handleEdit(comment)}>수정</Button>
+              <Button>삭제</Button>
+            </ButtonWrapper>
 
             <hr />
           </Comment>
@@ -62,16 +66,16 @@ const Content = styled.div`
   margin: 10px 0;
 `;
 
-const Button = styled.div`
+const ButtonWrapper = styled.div`
   text-align: right;
   margin: 10px 0;
-  & > a {
-    margin-right: 10px;
-    padding: 0.375rem 0.75rem;
-    border-radius: 0.25rem;
-    border: 1px solid lightgray;
-    cursor: pointer;
-  }
+`;
+const Button = styled.button`
+  margin-right: 10px;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid lightgray;
+  cursor: pointer;
 `;
 
 export default CommentList;
