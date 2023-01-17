@@ -12,7 +12,7 @@ const CommentList = () => {
   const commentList = useSelector((state: RootState) => state.comments);
 
   useEffect(() => {
-    dispatch(getCommentList(Number(page)));
+    dispatch(getCommentList(Number(page === null ? 1 : page)));
   }, [dispatch, page]);
 
   return (

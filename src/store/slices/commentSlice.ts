@@ -1,15 +1,17 @@
+import { findLastPage } from '../../utils/findLastPage';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getCommentsByPage } from '../../apis/comments';
 import { CommentType } from '../../types/comments.type';
 
 export const getCommentList = createAsyncThunk('comment/read', async (page: number) => {
-  const response = await getCommentsByPage(page, 4);
-  return response.data as CommentType[];
+  const { headers, data } = await getCommentsByPage(page, 4);
+  return { comments: data as CommentType[], total: findLastPage(`${headers.link}`) };
 });
 
 const initialState = {
   comments: [] as CommentType[],
   status: 'welcome',
+  total: 0,
 };
 
 const commentSlice = createSlice({
@@ -21,7 +23,8 @@ const commentSlice = createSlice({
       state.status = 'loading';
     });
     builder.addCase(getCommentList.fulfilled, (state, action) => {
-      state.comments = action.payload;
+      state.comments = action.payload.comments;
+      state.total = action.payload.total;
       state.status = 'complete';
     });
     builder.addCase(getCommentList.rejected, (state, action) => {

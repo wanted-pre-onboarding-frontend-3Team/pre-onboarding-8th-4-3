@@ -1,3 +1,5 @@
+import { RootState } from '../store/config';
+import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllComments } from '../apis/comments';
@@ -7,15 +9,9 @@ const PAGE_LIMIT = 5;
 
 const usePaginate = (nowPage: number = 1) => {
   const navigate = useNavigate();
-  const [totalPage, setTotalPage] = useState(0);
+  const totalPage = useSelector((state: RootState) => state.comments.total);
   const [pageArray, setPageArray] = useState<number[]>([]);
   const [totalPageArray, setTotalPageArray] = useState<number[]>([]);
-
-  useEffect(() => {
-    getAllComments().then((res) => {
-      setTotalPage(Math.ceil(res.data.length / COMMENT_LIMIT));
-    });
-  }, []);
 
   useEffect(() => {
     if (totalPage > 0) {
