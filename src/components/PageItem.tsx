@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
@@ -9,16 +10,13 @@ const PageItem = ({ pageId, activePage }: { pageId: number; activePage: string |
     else navigate('/');
   };
 
-  const isActive = () => {
-    if (activePage !== null) {
-      return pageId === +activePage;
-    }
-
+  const isActive = useCallback(() => {
+    if (activePage !== null) return pageId === +activePage;
     return pageId === 1;
-  };
+  }, [activePage, pageId]);
 
   return (
-    <Page key={pageId} onClick={selectPageHandler} active={isActive()}>
+    <Page onClick={selectPageHandler} active={isActive()}>
       {pageId}
     </Page>
   );

@@ -13,8 +13,8 @@ const CommentItem = ({ comment }: { comment: CommentTypes }) => {
       <Content>{comment.content}</Content>
 
       <Button>
-        <a>수정</a>
-        <a>삭제</a>
+        <button type="button">수정</button>
+        <button type="button">삭제</button>
       </Button>
 
       <hr />
