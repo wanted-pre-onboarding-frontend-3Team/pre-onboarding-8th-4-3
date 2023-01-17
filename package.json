@@ -48,6 +48,7 @@
     ]
   },
   "devDependencies": {
+    "@types/redux-logger": "^3.0.9",
     "@types/styled-components": "^5.1.26",
     "eslint": "^8.31.0",
     "eslint-config-airbnb": "^19.0.4",

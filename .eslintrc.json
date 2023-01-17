@@ -26,7 +26,6 @@
   "rules": {
     "arrow-body-style": "off",
     "semi": "off",
-    "prettier/prettier": ["off"],
     "react/function-component-definition": ["warn", { "namedComponents": "arrow-function" }],
     "react/jsx-one-expression-per-line": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".ts", ".tsx"] }],
@@ -49,6 +48,7 @@
     "no-alert": "off",
     "import/no-named-as-default": "off",
     "react/destructuring-assignment": "off",
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
 
     "no-shadow": "off",
     "no-unused-expressions": ["warn"],

@@ -1,4 +1,44 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { RootState } from '../store/config';
+import { getCommentList } from '../store/slices/commentSlice';
+
+const CommentList = () => {
+  const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get('page');
+  const commentList = useSelector((state: RootState) => state.comments);
+
+  useEffect(() => {
+    dispatch(getCommentList(Number(page)));
+  }, [dispatch, page]);
+
+  return (
+    <div>
+      {commentList &&
+        commentList.comments.map((comment) => (
+          <Comment key={comment.id}>
+            <img src={comment.profile_url} alt="" />
+
+            {comment.author}
+
+            <CreatedAt>{comment.createdAt}</CreatedAt>
+
+            <Content>{comment.content}</Content>
+
+            <Button>
+              <a>수정</a>
+              <a>삭제</a>
+            </Button>
+
+            <hr />
+          </Comment>
+        ))}
+    </div>
+  );
+};
 
 const Comment = styled.div`
   padding: 7px 10px;
@@ -33,41 +73,5 @@ const Button = styled.div`
     cursor: pointer;
   }
 `;
-
-// 임시 데이터 입니다. 코드 작성시 data 부분을 지워주세요
-const data = [
-  {
-    id: 1,
-    profile_url: 'https://picsum.photos/id/1/50/50',
-    author: 'abc_1',
-    content: 'UI 테스트는 어떻게 진행하나요',
-    createdAt: '2020-05-01',
-  },
-];
-
-const CommentList = () => {
-  return (
-    <>
-      {data.map((comment, key) => (
-        <Comment key={key}>
-          <img src={comment.profile_url} alt="" />
-
-          {comment.author}
-
-          <CreatedAt>{comment.createdAt}</CreatedAt>
-
-          <Content>{comment.content}</Content>
-
-          <Button>
-            <a>수정</a>
-            <a>삭제</a>
-          </Button>
-
-          <hr />
-        </Comment>
-      ))}
-    </>
-  );
-};
 
 export default CommentList;
