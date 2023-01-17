@@ -1,14 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
 import logger from 'redux-logger';
 
-import commentReducer from './comment';
+import { commentReducer } from './comment';
+import { pageReducer } from './page';
 
-export type AppDispatch = typeof store.dispatch;
-export const useAppDispatch: () => AppDispatch = useDispatch;
+export interface StoreState {
+  comment: ReturnType<typeof commentReducer>;
+  page: ReturnType<typeof pageReducer>;
+}
 
 const store = configureStore({
-  reducer: commentReducer,
+  reducer: { comment: commentReducer, page: pageReducer },
   middleware: [logger],
   devTools: process.env.NODE_ENV !== 'production',
 });
