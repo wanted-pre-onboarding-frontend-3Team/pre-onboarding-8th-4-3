@@ -13,9 +13,8 @@ const Form = () => {
   const formData = useSelector((state: RootState) => state.comments.formData);
   const pageNum = useCurrentPage();
 
-  const ChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const ChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     dispatch(commentActions.setCommentForm({ key: e.target.name, data: e.target.value }));
-  };
 
   const addCommentHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

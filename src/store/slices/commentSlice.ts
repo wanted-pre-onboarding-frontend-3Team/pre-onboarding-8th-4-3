@@ -41,8 +41,9 @@ const commentSlice = createSlice({
       state.formData = formData;
     },
   },
+
   extraReducers: (builder) => {
-    builder.addCase(getCommentList.pending, (state, action) => {
+    builder.addCase(getCommentList.pending, (state) => {
       state.status = 'loading';
     });
     builder.addCase(getCommentList.fulfilled, (state, action) => {
@@ -50,7 +51,7 @@ const commentSlice = createSlice({
       state.totalPage = action.payload.totalPage;
       state.status = 'complete';
     });
-    builder.addCase(getCommentList.rejected, (state, action) => {
+    builder.addCase(getCommentList.rejected, (state) => {
       state.comments = [];
       state.totalPage = 0;
       state.status = 'fail';
