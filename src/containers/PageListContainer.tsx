@@ -1,4 +1,4 @@
-import PageList from "../components/PageList";
+import PageList from '../components/PageList';
 
 const PageListContainer = () => {
   return <PageList />;
