@@ -3,13 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { postComment, editComment } from '../apis/comments';
+import { useCurrentPage } from '../hooks/use-current-page';
 import { RootState } from '../store/config';
-import { commentActions } from '../store/slices/commentSlice';
+import { commentActions, getCommentList } from '../store/slices/commentSlice';
 
 const Form = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const formData = useSelector((state: RootState) => state.comments.formData);
+  const pageNum = useCurrentPage();
 
   const ChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     dispatch(commentActions.setCommentForm({ key: e.target.name, data: e.target.value }));
@@ -19,19 +21,19 @@ const Form = () => {
     e.preventDefault();
 
     if (!formData.id) {
-      const { data } = await postComment({
+      await postComment({
         profile_url: formData.profile_url,
         author: formData.author,
         content: formData.content,
         createdAt: formData.createdAt,
       });
 
-      dispatch(commentActions.addComment(data));
+      dispatch(getCommentList(1));
       navigate('/');
     } else {
       await editComment(formData.id, formData);
 
-      dispatch(commentActions.changeComment({ id: formData.id, data: formData }));
+      dispatch(getCommentList(pageNum));
     }
 
     dispatch(commentActions.resetCommentForm());

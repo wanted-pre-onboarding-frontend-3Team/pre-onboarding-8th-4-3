@@ -1,20 +1,11 @@
-import { useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useCurrentPage } from '../hooks/use-current-page';
 import usePaginate from '../hooks/use-paginate';
+import PageItem from './PageItem';
 
 const PageList = () => {
-  const [searchParams] = useSearchParams();
-  const page = Number(searchParams.get('page'));
-  const { totalPage, pageArray, changePage, changePageArray } = usePaginate(page === 0 ? 1 : page);
-
-  const isSelect = useCallback(
-    (pageId: number) => {
-      if (page !== 0) return pageId === page;
-      return pageId === 1;
-    },
-    [page],
-  );
+  const pageNum = useCurrentPage();
+  const { totalPage, pageArray, changePage, changePageArray } = usePaginate(pageNum === 0 ? 1 : pageNum);
 
   return (
     <PageListStyle>
@@ -24,9 +15,7 @@ const PageList = () => {
         </Page>
       )}
       {pageArray.map((pageId) => (
-        <Page key={pageId} onClick={() => changePage(pageId)} isSelect={isSelect(pageId)}>
-          {pageId}
-        </Page>
+        <PageItem key={pageId} pageId={pageId} changePage={changePage} />
       ))}
       {pageArray[pageArray.length - 1] < totalPage && (
         <Page type="button" onClick={() => changePageArray('next')} isSelect={false}>

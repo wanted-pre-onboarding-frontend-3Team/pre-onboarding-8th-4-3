@@ -6,7 +6,7 @@ export const getAllComments = () => {
 };
 
 export const getCommentsByPage = (page: number, limit: number) => {
-  return request({ url: `/comments?_page=${page}&_limit=${limit}` });
+  return request({ url: `/comments?_page=${page}&_limit=${limit}&_order=desc&_sort=id` });
 };
 
 export const postComment = (CommentData: CommentType) => {

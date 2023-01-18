@@ -1,7 +1,7 @@
+import { CommentType } from '../../types/comments.type';
 import { COMMENT_LIMIT } from '../../constants/common';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getCommentsByPage } from '../../apis/comments';
-import { CommentType } from '../../types/comments.type';
 
 export const getCommentList = createAsyncThunk('comment/read', async (page: number) => {
   const response = await getCommentsByPage(page, COMMENT_LIMIT);
@@ -16,7 +16,7 @@ const formData = {
   content: '',
   createdAt: '',
   profile_url: '',
-};
+} as CommentType;
 
 const initialState = {
   comments: [] as CommentType[],
@@ -29,21 +29,6 @@ const commentSlice = createSlice({
   name: 'commentList',
   initialState,
   reducers: {
-    addComment(state, action) {
-      state.comments = [...state.comments, action.payload];
-      state.totalPage = Math.ceil(state.comments.length / COMMENT_LIMIT);
-    },
-
-    deleteComment(state, action) {
-      state.comments = state.comments.filter((comment) => comment.id !== action.payload);
-      state.totalPage = Math.ceil(state.comments.length / COMMENT_LIMIT);
-    },
-
-    changeComment(state, action) {
-      const changeCommentIndex = state.comments.findIndex((comment) => comment.id === action.payload.id);
-      state.comments[changeCommentIndex] = action.payload.data;
-    },
-
     setCommentForm(state, action) {
       state.formData = { ...state.formData, [action.payload.key]: action.payload.data };
     },

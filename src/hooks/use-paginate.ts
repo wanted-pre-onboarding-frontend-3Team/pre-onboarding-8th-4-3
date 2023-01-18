@@ -8,6 +8,7 @@ const usePaginate = (nowPage: number = 1) => {
   const navigate = useNavigate();
   const [pageArray, setPageArray] = useState<number[]>([]);
   const [totalPageArray, setTotalPageArray] = useState<number[]>([]);
+  const comments = useSelector((state: RootState) => state.comments.comments);
 
   const totalPage = useSelector((state: RootState) => state.comments.totalPage);
 
@@ -21,7 +22,7 @@ const usePaginate = (nowPage: number = 1) => {
       else startIndex = Math.floor(nowPage / PAGE_LIMIT) * PAGE_LIMIT;
       setPageArray(newPageArray.slice(startIndex, startIndex + PAGE_LIMIT));
     }
-  }, [nowPage, totalPage]);
+  }, [nowPage, totalPage, comments]);
 
   const changePage = (pageId: number) => {
     if (pageId === 1) navigate('/');

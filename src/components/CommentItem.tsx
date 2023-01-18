@@ -1,8 +1,9 @@
+import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { deleteComment } from '../apis/comments';
-import { commentActions } from '../store/slices/commentSlice';
+import { commentActions, getCommentList } from '../store/slices/commentSlice';
 import { CommentType } from '../types/comments.type';
 
 const CommentItem = ({ comment }: { comment: CommentType }) => {
@@ -12,13 +13,15 @@ const CommentItem = ({ comment }: { comment: CommentType }) => {
   const deleteCommentHandler = async () => {
     await deleteComment(Number(comment.id));
 
-    dispatch(commentActions.deleteComment(comment.id));
+    dispatch(getCommentList(1));
+
     navigate('/');
   };
 
-  const EditCommentHandler = () => {
-    dispatch(commentActions.setEditCommentForm(comment));
-  };
+  const EditCommentHandler = useCallback(
+    () => dispatch(commentActions.setEditCommentForm(comment)),
+    [comment, dispatch],
+  );
 
   return (
     <Comment key={comment.id}>

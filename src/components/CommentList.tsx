@@ -1,23 +1,22 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
+import { useCurrentPage } from '../hooks/use-current-page';
 import { RootState } from '../store/config';
 import { getCommentList } from '../store/slices/commentSlice';
 import CommentItem from './CommentItem';
 
 const CommentList = () => {
   const dispatch = useDispatch();
-  const [searchParams] = useSearchParams();
-  const page = searchParams.get('page');
-  const commentList = useSelector((state: RootState) => state.comments);
+  const pageNum = useCurrentPage();
+  const commentList = useSelector((state: RootState) => state.comments.comments);
 
   useEffect(() => {
-    dispatch(getCommentList(Number(page)));
-  }, [dispatch, page]);
+    dispatch(getCommentList(pageNum));
+  }, [dispatch, pageNum]);
 
   return (
     <div>
-      {commentList.comments.map((comment) => (
+      {commentList.map((comment) => (
         <CommentItem key={comment.id} comment={comment} />
       ))}
     </div>
