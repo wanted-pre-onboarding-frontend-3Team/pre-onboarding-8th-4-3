@@ -1,32 +1,40 @@
-import { FormEvent, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { ChangeEvent, FormEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { postComment } from '../apis/comments';
+import { postComment, editComment } from '../apis/comments';
+import { RootState } from '../store/config';
 import { commentActions } from '../store/slices/commentSlice';
 
 const Form = () => {
-  const profileRef = useRef<HTMLInputElement>(null);
-  const authorRef = useRef<HTMLInputElement>(null);
-  const contentRef = useRef<HTMLTextAreaElement>(null);
-  const dateRef = useRef<HTMLInputElement>(null);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const formData = useSelector((state: RootState) => state.comments.formData);
+
+  const ChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    dispatch(commentActions.setCommentForm({ key: e.target.name, data: e.target.value }));
+  };
 
   const addCommentHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { data } = await postComment({
-      profile_url: profileRef.current!.value,
-      author: authorRef.current!.value,
-      content: contentRef.current!.value,
-      createdAt: dateRef.current!.value,
-    });
+    if (!formData.id) {
+      const { data } = await postComment({
+        profile_url: formData.profile_url,
+        author: formData.author,
+        content: formData.content,
+        createdAt: formData.createdAt,
+      });
 
-    dispatch(commentActions.addComment(data));
+      dispatch(commentActions.addComment(data));
+      navigate('/');
+    } else {
+      await editComment(formData.id, formData);
 
-    navigate('/');
+      dispatch(commentActions.changeComment({ id: formData.id, data: formData }));
+    }
+
+    dispatch(commentActions.resetCommentForm());
   };
 
   return (
@@ -37,14 +45,29 @@ const Form = () => {
           name="profile_url"
           placeholder="https://picsum.photos/id/1/50/50"
           required
-          ref={profileRef}
+          onChange={ChangeHandler}
+          value={formData.profile_url}
         />
         <br />
-        <input type="text" name="author" placeholder="작성자" required ref={authorRef} />
+        <input
+          type="text"
+          name="author"
+          placeholder="작성자"
+          required
+          value={formData.author}
+          onChange={ChangeHandler}
+        />
         <br />
-        <textarea name="content" placeholder="내용" required ref={contentRef} />
+        <textarea name="content" placeholder="내용" required value={formData.content} onChange={ChangeHandler} />
         <br />
-        <input type="text" name="createdAt" placeholder="2020-05-30" required ref={dateRef} />
+        <input
+          type="text"
+          name="createdAt"
+          placeholder="2020-05-30"
+          required
+          value={formData.createdAt}
+          onChange={ChangeHandler}
+        />
         <br />
         <button type="submit">등록</button>
       </form>

@@ -1,4 +1,5 @@
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { deleteComment } from '../apis/comments';
 import { commentActions } from '../store/slices/commentSlice';
@@ -6,11 +7,17 @@ import { CommentType } from '../types/comments.type';
 
 const CommentItem = ({ comment }: { comment: CommentType }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const deleteCommentHandler = async () => {
     await deleteComment(Number(comment.id));
 
     dispatch(commentActions.deleteComment(comment.id));
+    navigate('/');
+  };
+
+  const EditCommentHandler = () => {
+    dispatch(commentActions.setEditCommentForm(comment));
   };
 
   return (
@@ -24,7 +31,9 @@ const CommentItem = ({ comment }: { comment: CommentType }) => {
       <Content>{comment.content}</Content>
 
       <Button>
-        <button type="button">수정</button>
+        <button type="button" onClick={EditCommentHandler}>
+          수정
+        </button>
         <button type="button" onClick={deleteCommentHandler}>
           삭제
         </button>

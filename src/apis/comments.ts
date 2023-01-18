@@ -9,11 +9,11 @@ export const getCommentsByPage = (page: number, limit: number) => {
   return request({ url: `/comments?_page=${page}&_limit=${limit}` });
 };
 
-export const postComment = (data: CommentType) => {
+export const postComment = (CommentData: CommentType) => {
   return request({
     method: 'POST',
     url: '/comments',
-    data,
+    data: CommentData,
   });
 };
 
@@ -24,4 +24,10 @@ export const deleteComment = (id: number) => {
   });
 };
 
-// export const editComment = () => {};
+export const editComment = (id: number, CommentData: CommentType) => {
+  return request({
+    method: 'PUT',
+    url: `/comments/${id}`,
+    data: CommentData,
+  });
+};
