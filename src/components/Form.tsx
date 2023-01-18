@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { editComment, postComment } from '../apis/comments';
 import useCommentForm from '../hooks/use-comment-form';
+import useNowPage from '../hooks/use-now-page';
 import { RootState } from '../store/config';
-import { editCommentState } from '../store/slices/commentSlice';
+import { editCommentState, getCommentList } from '../store/slices/commentSlice';
 import { CommentType, PostCommentType } from '../types/comments.type';
 
 const Form = () => {
@@ -15,6 +16,7 @@ const Form = () => {
   const navigate = useNavigate();
   const { profileUrl, setProfileUrl, author, setAuthor, content, setContent, createdAt, setCreatedAt, clearForm } =
     useCommentForm(initForm);
+  const page = useNowPage();
 
   useEffect(() => {
     if (initForm) firstInputRef.current?.focus();
@@ -37,7 +39,8 @@ const Form = () => {
       profile_url: profileUrl,
     } as PostCommentType)
       .then(() => {
-        navigate('/');
+        if (page > 1) navigate('/');
+        else dispatch(getCommentList(1));
         clearForm();
       })
       .catch();
