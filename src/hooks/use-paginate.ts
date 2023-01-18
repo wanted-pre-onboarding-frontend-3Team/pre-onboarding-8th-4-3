@@ -1,21 +1,16 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getAllComments } from '../apis/comments';
-
-const COMMENT_LIMIT = 4;
-const PAGE_LIMIT = 5;
+import { PAGE_LIMIT } from '../constants/common';
+import { RootState } from '../store/config';
 
 const usePaginate = (nowPage: number = 1) => {
   const navigate = useNavigate();
-  const [totalPage, setTotalPage] = useState(0);
   const [pageArray, setPageArray] = useState<number[]>([]);
   const [totalPageArray, setTotalPageArray] = useState<number[]>([]);
+  const comments = useSelector((state: RootState) => state.comments.comments);
 
-  useEffect(() => {
-    getAllComments().then((res) => {
-      setTotalPage(Math.ceil(res.data.length / COMMENT_LIMIT));
-    });
-  }, []);
+  const totalPage = useSelector((state: RootState) => state.comments.totalPage);
 
   useEffect(() => {
     if (totalPage > 0) {
@@ -27,7 +22,7 @@ const usePaginate = (nowPage: number = 1) => {
       else startIndex = Math.floor(nowPage / PAGE_LIMIT) * PAGE_LIMIT;
       setPageArray(newPageArray.slice(startIndex, startIndex + PAGE_LIMIT));
     }
-  }, [nowPage, totalPage]);
+  }, [nowPage, totalPage, comments]);
 
   const changePage = (pageId: number) => {
     if (pageId === 1) navigate('/');
