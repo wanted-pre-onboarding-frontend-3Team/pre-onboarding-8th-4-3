@@ -18,21 +18,22 @@ const PageList = () => {
 
   return (
     <PageListStyle>
-      {pageArray[0] > 1 && (
-        <Page type="button" onClick={() => changePageArray('prev')} isSelect={false}>
-          이전
-        </Page>
-      )}
+      <Page type="button" disabled={!(pageArray[0] > 1)} onClick={() => changePageArray('prev')} isSelect={false}>
+        이전
+      </Page>
       {pageArray.map((pageId) => (
         <Page key={pageId} onClick={() => changePage(pageId)} isSelect={isSelect(pageId)}>
           {pageId}
         </Page>
       ))}
-      {pageArray[pageArray.length - 1] < totalPage && (
-        <Page type="button" onClick={() => changePageArray('next')} isSelect={false}>
-          다음
-        </Page>
-      )}
+      <Page
+        type="button"
+        disabled={!(pageArray[pageArray.length - 1] < totalPage)}
+        onClick={() => changePageArray('next')}
+        isSelect={false}
+      >
+        다음
+      </Page>
     </PageListStyle>
   );
 };
